@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"  xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+</head>
+<body>
+
+<div class="title">Case Converter</div>
+
+<label for="textarea">File content</label>
+<textarea id="textarea" rows="5"></textarea>
+<br>
+<button type="button" id="upper-case"> Upper Case</button>
+<button type="button" id="lower-case"> Lower Case</button>
+<button type="button" id="proper-case"> Proper Case</button>
+<button type="button" id="sentence-case"> Sentence Case</button>
+<button type="button" id="save-text-file">Save text file</button>
+
+<script>
+
+    let text = document.getElementById("textarea");
+    document.getElementById("upper-case").addEventListener("click", function ()
+    { text.value = text.value.toUpperCase(); });
+
+    document.getElementById("lower-case").addEventListener("click", function ()
+    { text.value = text.value.toLowerCase(); });
+
+    document.getElementById("proper-case").addEventListener("click", function ()
+    { let words = text.value.toLowerCase().split(' ');
+      let temp = "";
+      for (let w of words)
+      { temp += capitalize(w) +" ";}
+      text.value = temp.trimEnd(); });
+
+
+    document.getElementById("sentence-case").addEventListener("click", function ()
+    { let words = text.value.toLowerCase().split(' ');
+      let result = "";
+            for (let i = 0; i < words.length; i++)
+                    { if (i === 0)
+                        { result += capitalize(words[i]) + " "; }
+                        else { let lastWord = words[i -1];
+                      if (lastWord.charAt(lastWord.length - 1) === '.')
+                         { result += capitalize(words[i]) + " "; }
+                         else { result += words[i] + " "; }
+                              }
+                    }
+
+    text.value = result.trimEnd(); });
+    let capitalize = function capitalize(string)
+    {  return string.charAt(0).toUpperCase() + string.substring(1);
+    };
+
+    function download(filename,text) {
+        let element = document.createElement('a');
+        element.setAttribute('href','data:text/plain;charset=utf8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
+    //download("text.txt","This is the content of my file :)");
+    document.getElementById("save-text-file").addEventListener("click",
+        function () {
+            let text = document.getElementById("textarea").value;
+            let filename = "text.txt"
+            download("text.txt", text);
+        },false);
+</script>
+
+</body>
+</html>
